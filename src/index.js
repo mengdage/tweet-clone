@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 
 import './index.css';
@@ -36,6 +37,17 @@ function Tweet({tweet}) {
   );
 }
 
+Tweet.propTypes = {
+  tweet: PropTypes.shape({
+    message: PropTypes.string,
+    gravatar: PropTypes.string,
+    author: PropTypes.objectOf(PropTypes.string),
+    likes: PropTypes.number,
+    retweets: PropTypes.number,
+    timestamp: PropTypes.string
+  }).isRequired
+};
+
 function Avatar({hash}) {
   const url = `https://www.gravatar.com/avatar/${hash}`;
   return (
@@ -47,6 +59,10 @@ function Avatar({hash}) {
   );
 }
 
+Avatar.propTypes = {
+  hash: PropTypes.string.isRequired
+};
+
 function Message({message}) {
   return (
     <div
@@ -56,6 +72,10 @@ function Message({message}) {
     </div>
   );
 }
+
+Message.propTypes = {
+  message: PropTypes.string
+};
 
 function NameWithHandle({author}) {
   return (
@@ -68,11 +88,21 @@ function NameWithHandle({author}) {
   );
 }
 
+NameWithHandle.propTypes = {
+  author: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    handle: PropTypes.string.isRequired
+  }).isRequired
+};
+
 const Time = ({timestamp}) => {
   const timestring = moment(timestamp).fromNow();
   return (<span className='time'>{timestring}</span>);
 };
 
+Time.propTypes = {
+  timestap: PropTypes.string
+};
 
 const ReplyButton = () => (
   <span className='reply-button'>
@@ -90,12 +120,20 @@ function RetweetCount({count}) {
   }
 }
 
+RetweetCount.propTypes = {
+  count: PropTypes.number
+};
+
 const RetweetButton =({count}) => (
   <span className='retweet-button'>
     <i className='fa fa-retweet'/>
     <RetweetCount count={count} />
   </span>
 );
+
+RetweetButton.propTypes = {
+  count: PropTypes.number
+};
 
 const LikeButton = ({count}) => (
   <span className='like-button'>
@@ -104,10 +142,15 @@ const LikeButton = ({count}) => (
   </span>
 );
 
+LikeButton.propTypes = {
+  count: PropTypes.number
+};
+
 const MoreOptionsButton = () => (
   <span className='more-options-button'>
     <i className='fa fa-ellipsis-h' />
   </span>
 );
+
 
 ReactDOM.render(<Tweet tweet={testTweet}/>, document.getElementById('root'));
