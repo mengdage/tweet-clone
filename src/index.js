@@ -153,4 +153,52 @@ const MoreOptionsButton = () => (
 );
 
 
-ReactDOM.render(<Tweet tweet={testTweet}/>, document.getElementById('root'));
+const ErrorBox = function({children}) {
+  return (
+    <div>
+      <i className='fa fa-exclamation-triangle' />
+      <span>{children}</span>
+    </div>
+  );
+};
+
+const Nav = function({children}) {
+  // Check if all children are NavItems
+  React.Children.forEach(children, (child) => {
+    if (child.type !== NavItem) {
+      throw new Error('Invalid children type');
+    }
+  });
+
+  // const navItems = React.Children.toArray(children);
+  // const delimitedNavItems = [];
+
+  return (
+    <div>{children}</div>
+  );
+};
+
+Nav.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
+const NavItem = function({url, children}) {
+  return (
+    <a href={url}>{children}</a>
+  );
+};
+
+NavItem.propTypes = {
+  url: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.string
+  ])
+};
+
+// ReactDOM.render(<Tweet tweet={testTweet}/>, document.getElementById('root'));
+ReactDOM.render(
+  <Nav>
+    <NavItem url='hello'>hello</NavItem>
+    <NavItem url='world'>world</NavItem>
+  </Nav>, document.getElementById('root'));
